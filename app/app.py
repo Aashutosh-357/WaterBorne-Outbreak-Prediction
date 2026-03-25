@@ -34,35 +34,41 @@ Run: streamlit run app/app.py
 #     create_prediction_result_card
 # )
 
+from pathlib import Path
+
 # ──────────────────────────────────────────────────────────────
-# PATH SETUP (Robust for Cloud & Local)
+# PATH SETUP (Robust pathlib version)
 # ──────────────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# This points to the /app folder
+CURRENT_DIR = Path(__file__).parent.absolute()
 
-# Ensure the root directory is in sys.path so 'app' and 'models' are findable
-if BASE_DIR not in sys.path:
-    sys.path.insert(0, BASE_DIR)
+# This points to the root folder /mount/src/waterborne-outbreak-prediction/
+BASE_DIR = CURRENT_DIR.parent
 
-# Dynamically resolve paths
-MODEL_PATH = os.path.join(BASE_DIR, "models", "xgboost_model.pkl")
-ENCODERS_PATH = os.path.join(BASE_DIR, "models", "label_encoders.pkl")
-RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "waterborne_disease.csv")
-PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "waterborne_processed.csv")
+# Add BASE_DIR to sys.path so we can import 'app' and 'models'
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
-# IMPORT COMPONENTS (Handling both local and cloud pathing)
+# Map file paths using the / (slash) operator provided by pathlib
+MODEL_PATH = BASE_DIR / "models" / "xgboost_model.pkl"
+ENCODERS_PATH = BASE_DIR / "models" / "label_encoders.pkl"
+RAW_DATA_PATH = BASE_DIR / "data" / "raw" / "waterborne_disease.csv"
+PROCESSED_DATA_PATH = BASE_DIR / "data" / "processed" / "waterborne_processed.csv"
+
+# IMPORT COMPONENTS
+# Since BASE_DIR is in sys.path, we can import from the app package directly
 try:
-    from components import (
-        create_gauge_chart, create_feature_importance_chart,
-        create_confusion_matrix_chart, create_outbreak_distribution_chart,
-        create_prediction_result_card
-    )
-except ImportError:
     from app.components import (
         create_gauge_chart, create_feature_importance_chart,
         create_confusion_matrix_chart, create_outbreak_distribution_chart,
         create_prediction_result_card
     )
-
+except (ImportError, ModuleNotFoundError):
+    from components import (
+        create_gauge_chart, create_feature_importance_chart,
+        create_confusion_matrix_chart, create_outbreak_distribution_chart,
+        create_prediction_result_card
+    )
     
 
 # ──────────────────────────────────────────────────────────────
