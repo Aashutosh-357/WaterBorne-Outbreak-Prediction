@@ -26,7 +26,7 @@ ENCODERS_PATH = os.path.join(BASE_DIR, "models", "label_encoders.pkl")
 RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "waterborne_disease.csv")
 PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "waterborne_processed.csv")
 
-from components import (
+from app.components import (
     create_gauge_chart,
     create_feature_importance_chart,
     create_confusion_matrix_chart,
