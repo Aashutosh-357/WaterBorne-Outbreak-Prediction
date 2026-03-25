@@ -7,32 +7,63 @@ disease outbreaks across India using a trained XGBoost model.
 Run: streamlit run app/app.py
 """
 
-import os
-import sys
-import streamlit as st
-import pandas as pd
-import numpy as np
-import joblib
-import plotly.express as px
+# import os
+# import sys
+# import streamlit as st
+# import pandas as pd
+# import numpy as np
+# import joblib
+# import plotly.express as px
+
+# # ──────────────────────────────────────────────────────────────
+# # PATH SETUP
+# # ──────────────────────────────────────────────────────────────
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.insert(0, BASE_DIR)
+
+# MODEL_PATH = os.path.join(BASE_DIR, "models", "xgboost_model.pkl")
+# ENCODERS_PATH = os.path.join(BASE_DIR, "models", "label_encoders.pkl")
+# RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "waterborne_disease.csv")
+# PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "waterborne_processed.csv")
+
+# from app.components import (
+#     create_gauge_chart,
+#     create_feature_importance_chart,
+#     create_confusion_matrix_chart,
+#     create_outbreak_distribution_chart,
+#     create_prediction_result_card
+# )
 
 # ──────────────────────────────────────────────────────────────
-# PATH SETUP
+# PATH SETUP (Robust for Cloud & Local)
 # ──────────────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, BASE_DIR)
 
+# Ensure the root directory is in sys.path so 'app' and 'models' are findable
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+# Dynamically resolve paths
 MODEL_PATH = os.path.join(BASE_DIR, "models", "xgboost_model.pkl")
 ENCODERS_PATH = os.path.join(BASE_DIR, "models", "label_encoders.pkl")
 RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "waterborne_disease.csv")
 PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "waterborne_processed.csv")
 
-from app.components import (
-    create_gauge_chart,
-    create_feature_importance_chart,
-    create_confusion_matrix_chart,
-    create_outbreak_distribution_chart,
-    create_prediction_result_card
-)
+# IMPORT COMPONENTS (Handling both local and cloud pathing)
+try:
+    from components import (
+        create_gauge_chart, create_feature_importance_chart,
+        create_confusion_matrix_chart, create_outbreak_distribution_chart,
+        create_prediction_result_card
+    )
+except ImportError:
+    from app.components import (
+        create_gauge_chart, create_feature_importance_chart,
+        create_confusion_matrix_chart, create_outbreak_distribution_chart,
+        create_prediction_result_card
+    )
+
+    
 
 # ──────────────────────────────────────────────────────────────
 # PAGE CONFIG
