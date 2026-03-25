@@ -1,0 +1,25 @@
+# Ignore huge raw data to keep the Docker image small and fast
+data/raw/
+
+# Ignore virtual environments
+venv/
+env/
+.venv/
+
+# Ignore python bytecode and caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env.bak/
+venv.bak/
+
+# Ignore IDE files
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore notebooks as they aren't needed for the app
+notebooks/
+.ipynb_checkpoints/

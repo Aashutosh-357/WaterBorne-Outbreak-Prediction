@@ -1,0 +1,29 @@
+AIOPS_Project/
+│
+├── data/                   # Never upload this folder to GitHub (Too large!)
+│   ├── raw/                # The 1.2GB dataset goes here (do not touch it!)
+│   └── processed/          # Cleaned data ready for the Streamlit app
+│
+├── models/                 # Saved AI models go here
+│   └── xgboost_model.pkl   # The trained brain of your app
+│
+├── notebooks/              # Google Colab / Jupyter notebooks go here
+│   └── 01_data_training.ipynb  # The code we just wrote!
+│
+├── src/                    # Source code (Helper functions)
+│   ├── __init__.py
+│   ├── data_loader.py      # Python script to load data
+│   └── model_trainer.py    # Python script to retrain the model
+│
+├── app/                    # The Streamlit Web App folder
+│   ├── app.py              # The main dashboard file!
+│   ├── components.py       # (Optional) Maps or charts code
+│   └── assets/             # Images, logos (e.g., MoDoNER logo)
+│
+├── reports/                # For your Faculty submissions
+│   ├── Capstone_Report.pdf
+│   └── figures/            # Saved SHAP graphs and maps for the report
+│
+├── .gitignore              # Tells Git to IGNORE the 1.2GB data file!
+├── requirements.txt        # List of all Python libraries needed
+└── README.md               # The front page of your project (How to run it)
