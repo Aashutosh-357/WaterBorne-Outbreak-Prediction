@@ -7,13 +7,13 @@ disease outbreaks across India using a trained XGBoost model.
 Run: streamlit run app/app.py
 """
 
-# import os
-# import sys
-# import streamlit as st
-# import pandas as pd
-# import numpy as np
-# import joblib
-# import plotly.express as px
+import os
+import sys
+import streamlit as st
+import pandas as pd
+import numpy as np
+import joblib
+import plotly.express as px
 
 # # ──────────────────────────────────────────────────────────────
 # # PATH SETUP
