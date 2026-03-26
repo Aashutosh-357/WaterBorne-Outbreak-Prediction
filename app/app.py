@@ -139,13 +139,14 @@ def load_encoders():
 
 @st.cache_data
 def load_data():
-    """Load the raw dataset for exploratory analysis, falling back to a demo set on Render."""
-    if os.path.exists(RAW_DATA_PATH):
-        df = pd.read_csv(RAW_DATA_PATH, nrows=100000)
-        df['is_demo'] = False
-    elif os.path.exists(DEMO_DATA_PATH):
+    """Load the dataset, prioritizing the demo set."""
+    # Swap the if/elif order to check for DEMO_DATA_PATH first
+    if os.path.exists(DEMO_DATA_PATH):
         df = pd.read_csv(DEMO_DATA_PATH)
         df['is_demo'] = True
+    elif os.path.exists(RAW_DATA_PATH):
+        df = pd.read_csv(RAW_DATA_PATH, nrows=100000)
+        df['is_demo'] = False
     else:
         return None
 
