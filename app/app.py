@@ -25,6 +25,7 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "xgboost_model.pkl")
 ENCODERS_PATH = os.path.join(BASE_DIR, "models", "label_encoders.pkl")
 RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "waterborne_disease.csv")
 PROCESSED_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "waterborne_processed.csv")
+DEMO_DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "demo.csv")
 
 from components import (
     create_gauge_chart,
@@ -138,12 +139,20 @@ def load_encoders():
 
 @st.cache_data
 def load_data():
-    """Load the raw dataset for exploratory analysis."""
+    """Load the raw dataset for exploratory analysis, falling back to a demo set on Render."""
     if os.path.exists(RAW_DATA_PATH):
-        df = pd.read_csv(RAW_DATA_PATH, nrows=100000)  # Load subset for speed
-        df['Outbreak_Risk'] = np.where(df['disease'] == 'No_Disease', 0, 1)
-        return df
-    return None
+        df = pd.read_csv(RAW_DATA_PATH, nrows=100000)
+        df['is_demo'] = False
+    elif os.path.exists(DEMO_DATA_PATH):
+        df = pd.read_csv(DEMO_DATA_PATH)
+        df['is_demo'] = True
+    else:
+        return None
+
+    # Ensure outbreak risk exists
+    if 'Outbreak_Risk' not in df.columns:
+        df['Outbreak_Risk'] = np.where(df['disease'] == 'No_Disease', 0, 1) if 'disease' in df.columns else 0
+    return df
 
 
 # ──────────────────────────────────────────────────────────────
@@ -354,6 +363,9 @@ elif page == "📊 Data Explorer":
     """, unsafe_allow_html=True)
 
     if df is not None:
+        if df.get('is_demo', [False])[0]:
+            st.info("💡 **Note:** Running on Render (Cloud). Showing a **Demo Sample** dataset since the 1.2GB raw file is excluded for performance.")
+        
         # Quick stats
         col1, col2, col3 = st.columns(3)
         with col1:
