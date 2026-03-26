@@ -138,15 +138,14 @@ def load_encoders():
 
 
 @st.cache_data
-def load_data():
-    """Load the dataset, prioritizing the demo set."""
-    # Swap the if/elif order to check for DEMO_DATA_PATH first
-    if os.path.exists(DEMO_DATA_PATH):
-        df = pd.read_csv(DEMO_DATA_PATH)
-        df['is_demo'] = True
-    elif os.path.exists(RAW_DATA_PATH):
+def load_data():    
+    """Load the raw dataset for exploratory analysis, falling back to a demo set on Render."""
+    if os.path.exists(RAW_DATA_PATH):
         df = pd.read_csv(RAW_DATA_PATH, nrows=100000)
         df['is_demo'] = False
+    elif os.path.exists(DEMO_DATA_PATH):
+        df = pd.read_csv(DEMO_DATA_PATH)
+        df['is_demo'] = True
     else:
         return None
 
@@ -452,8 +451,7 @@ elif page == "📊 Data Explorer":
         st.markdown('<div class="section-header">📄 Raw Data Preview</div>', unsafe_allow_html=True)
         st.dataframe(df.head(100), use_container_width=True, height=300)
     else:
-        st.warning("⚠️ Raw dataset not found. Please ensure the CSV is at `data/raw/waterborne_disease.csv`.")
-
+        st.warning("⚠️ Because of large file over 1GB+ I can't uploaded on live. but u can see it on google drive link U can find it on github readme.")
 
 # ──────────────────────────────────────────────────────────────
 # PAGE: MODEL PERFORMANCE
